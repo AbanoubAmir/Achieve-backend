@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 //importing needed models 
-
+const prespectives = require('../models/milestones'); 
 exports.login = async (req , res , next) => {
     if(req.body.Username == 'emamm' && req.body.Password == '123'){
         let Userdata = {
@@ -33,6 +33,7 @@ exports.getProfile = async (req , res , next) => {
             LastName: 'Emamm',
             email: 'test@test.com',
         }; 
+        console.log(prespectives.findAndCountAll());
         res.status(200).json({
             message: 'successful call' ,
             body: Userdata
