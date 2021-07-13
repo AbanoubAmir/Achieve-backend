@@ -22,19 +22,25 @@ const Milestones = sequelize.define('milestones',{
         type:Sequelize.INTEGER  
     }, 
     ActualValue:{
-        type:Sequelize.INTEGER
+        type:Sequelize.INTEGER,
+        defaultValue: '0'
     },
     Progress:{
-        type:Sequelize.INTEGER
+        type:Sequelize.INTEGER,
+        defaultValue: '0'
+
     } , 
     PlannedBudget:{
-        type:Sequelize.INTEGER
+        type:Sequelize.INTEGER,
+        defaultValue: '0'
     },
     ApprovedBudget:{
-        type:Sequelize.INTEGER
+        type:Sequelize.INTEGER,
+        defaultValue: '0'
     } , 
     SpentBudget:{
-        type:Sequelize.INTEGER
+        type:Sequelize.INTEGER,
+        defaultValue: '0'
     } 
 });
 Milestones.belongsTo(Initiatives, {as: 'Parent'}); // Adds organizations to user rather than organizationsID

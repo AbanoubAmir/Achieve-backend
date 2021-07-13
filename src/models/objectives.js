@@ -12,4 +12,4 @@ const Objectives = sequelize.define('objective',{
 });
 Objectives.belongsTo(Goals, {as: 'Parent'}); // Adds organizations to user rather than organizationsID
 
-module.exports = Goals; 
+module.exports = Objectives; 

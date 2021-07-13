@@ -2,7 +2,6 @@ const express = require('express') ;
 const cors = require('cors');
 require('express-async-errors'); 
 require('dotenv').config({path:__dirname+'/.env'});
-const mysql = require('mysql2');
 const app = express() ;
 const port = process.env.PORT || 8000  ; 
 
@@ -23,6 +22,7 @@ app.use(express.urlencoded({limit:'50mb' , extended:true , parameterLimit:50000}
 //importing routes 
 const authRoutes = require('./routes/auth'); 
 const initRoutes = require('./routes/initiatives'); 
+const dataControlRoutes = require('./routes/dataControl'); 
 
 //make the app listen to port 8000
 app.listen(port , ()=>{
@@ -48,5 +48,6 @@ app.use((req, res, next) => {
 //routing config
 app.use('/api/auth',authRoutes); 
 app.use('/api/initiatives',initRoutes); 
+app.use('/api/dataControl',dataControlRoutes); 
 
 module.exports = app ;
