@@ -4,7 +4,7 @@
   "description": "achieve-backend",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "start": "node src/index.js"
   },
   "author": "dev-team",
   "license": "ISC",
