@@ -23,6 +23,7 @@ app.use(express.urlencoded({limit:'50mb' , extended:true , parameterLimit:50000}
 const authRoutes = require('./routes/auth'); 
 const initRoutes = require('./routes/initiatives'); 
 const dataControlRoutes = require('./routes/dataControl'); 
+const plan_structureRoutes = require('./routes/plan-structure');
 
 //make the app listen to port 8000
 app.listen(port , ()=>{
@@ -49,5 +50,6 @@ app.use((req, res, next) => {
 app.use('/api/auth',authRoutes); 
 app.use('/api/initiatives',initRoutes); 
 app.use('/api/dataControl',dataControlRoutes); 
+app.use('/api/plan-structure',plan_structureRoutes); 
 
 module.exports = app ;
