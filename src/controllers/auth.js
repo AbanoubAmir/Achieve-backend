@@ -6,17 +6,22 @@ require('dotenv').config();
 const prespectives = require('../models/milestones'); 
 exports.login = async (req , res , next) => {
     if(req.body.Username == 'emamm' && req.body.Password == '123'){
-        let Userdata = {
-            Username: 'Mohamed_123',
-            FirstName: 'Mohamed',
-            LastName: 'Emamm',
+        const token = jwt.sign({
+            username: 'Mohamed_123',
+            name: 'Mohamed Emamm',
             email: 'test@test.com',
-        }; 
-        const token = jwt.sign(Userdata , process.env.JWTSecretKey, {expiresIn:'1d'});
-        Userdata['token'] = token;
+            type:'Employee',
+            isAdmin : false , 
+            message:'logged in successfully'
+    } , process.env.JWTSecretKey, {expiresIn:'1d'});
         res.status(200).json({
-            message: 'successful call' ,
-            body: Userdata
+                username: 'Mohamed_123',
+                name: 'Mohamed Emamm',
+                email: 'test@test.com',
+                type:'Employee',
+                isAdmin : false , 
+                token:token,
+                message:'logged in successfully'
         }); 
     }
     else{
