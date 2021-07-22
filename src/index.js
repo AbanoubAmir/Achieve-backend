@@ -12,7 +12,7 @@ app.use(cors());
 const db = require('./config/database'); 
 db.authenticate()
 .then(()=> console.log('Database Connected!'))
-.catch(()=> console.log('failed'));
+.catch((e)=> console.log(e));
 
 //express.json to manage the req content 
 app.use(express.json({limit:'50mb'}));
