@@ -8,6 +8,10 @@ const Objectives = sequelize.define('objective',{
     },
     ObjectiveName:{
         type : Sequelize.STRING
+    },
+    Progress:{
+        type:Sequelize.INTEGER,
+        defaultValue: '0'
     }
 });
 Objectives.belongsTo(Goals, {as: 'Parent'}); // Adds organizations to user rather than organizationsID

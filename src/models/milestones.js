@@ -28,7 +28,6 @@ const Milestones = sequelize.define('milestones',{
     Progress:{
         type:Sequelize.INTEGER,
         defaultValue: '0'
-
     } , 
     PlannedBudget:{
         type:Sequelize.INTEGER,
