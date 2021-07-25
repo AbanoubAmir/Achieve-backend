@@ -6,4 +6,5 @@ const sequelize = new Sequelize('achieve' , 'achieveAdmin@achieve-db' , 'Al_Ahly
 // sequelize.sync() ;
 
 module.exports = sequelize; 
-global.sequelize = sequelize; 
+
+global.sequelize = sequelize;   

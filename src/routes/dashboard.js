@@ -1,7 +1,7 @@
 const router = require('express').Router() ;
-const planCtrl = require('../controllers/plan-structure'); 
+const dashboardCtrl = require('../controllers/dashboard'); 
 const validateToken = require('../middleware/validate-token');
 
-router.get('' ,validateToken,planCtrl.getPlanStrucutre) ;
+router.get('' , validateToken, dashboardCtrl.getDashboard) ;
 
 module.exports = router;

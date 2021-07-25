@@ -3,21 +3,31 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 //importing needed models 
-const prespectives = require('../models/milestones'); 
+const users = require('../models/users'); 
+
+
 exports.login = async (req , res , next) => {
-    if(req.body.Username == 'emamm' && req.body.Password == '123'){
+    let fetchedUser = {};
+    await users.findOne({
+        where: {
+            username: req.body.Username,
+            password:req.body.Password
+    }}).then((user)=>{
+        fetchedUser = user.dataValues;
+    });
+    if(fetchedUser !== null){
         const token = jwt.sign({
-            username: 'Mohamed_123',
-            name: 'Mohamed Emamm',
-            email: 'test@test.com',
+            username: fetchedUser.username,
+            name: fetchedUser.firstname + '' + fetchedUser.lastname,
+            email: fetchedUser.email,
             type:'Employee',
             isAdmin : false , 
             message:'logged in successfully'
     } , process.env.JWTSecretKey, {expiresIn:'1d'});
         res.status(200).json({
-                username: 'Mohamed_123',
-                name: 'Mohamed Emamm',
-                email: 'test@test.com',
+                username: fetchedUser.username,
+                name: fetchedUser.firstname + '' + fetchedUser.lastname,
+                email: fetchedUser.email,
                 type:'Employee',
                 isAdmin : false , 
                 token:token,
