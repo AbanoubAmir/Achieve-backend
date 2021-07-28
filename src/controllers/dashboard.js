@@ -3,12 +3,15 @@ const prespectives = require('../models/prespectives');
 const goals = require('../models/goals'); 
 const objectives = require('../models/objectives');
 const initiatives = require('../models/initiatives');
+const milestones = require('../models/milestones');
+
 const common = require('../shared/commonMethods');
+
 exports.getDashboard = async (req , res , next) => {
     try{
         let fetchedRows = [] ; 
         //list all the prespectives
-        await prespectives.findAll({attributes: ['ID', 'PerspectiveName' , 'Progress']}).then((prespectives)=>{
+        await prespectives.findAll({attributes: ['ID', 'PerspectiveName']}).then((prespectives)=>{
             prespectives.forEach(ele => {
                 fetchedRows.push(ele.dataValues);
             }); 
@@ -19,7 +22,7 @@ exports.getDashboard = async (req , res , next) => {
                 where: {
                     ParentID: row.ID 
                 },
-                attributes: ['ID', 'GoalName' , 'Progress']
+                attributes: ['ID', 'GoalName']
             }).then((goals)=>{
                 row['Goals'] = [] ; 
                 goals.forEach(ele => {
@@ -34,7 +37,7 @@ exports.getDashboard = async (req , res , next) => {
                     where: {
                         ParentID: goal.ID 
                     },
-                    attributes: ['ID', 'ObjectiveName', 'Progress']
+                    attributes: ['ID', 'ObjectiveName']
                 }).then((objectives)=>{
                     goal['Objectives'] = [] ; 
                     objectives.forEach(ele => {
@@ -52,7 +55,7 @@ exports.getDashboard = async (req , res , next) => {
                     where: {
                         ParentID: obj.ID 
                     },
-                    attributes: ['ID', 'InitiativeName', 'Progress']
+                    attributes: ['ID', 'InitiativeName']
                 }).then((initiatives)=>{
                     obj['Initiatives'] = [] ; 
                     initiatives.forEach(ele => {
@@ -62,7 +65,27 @@ exports.getDashboard = async (req , res , next) => {
             }
           }
         };
-
+        //list all the milestones
+        for(let row of fetchedRows){
+            for(let goal of row['Goals']){
+             for(let obj of goal['Objectives']){
+                for(let init of obj['Initiatives']){
+                 await milestones.findAll({
+                     where: {
+                         ParentID: init.ID 
+                     },
+                     attributes: ['ID' , 'Progress']
+                 }).then((milestones)=>{
+                    init['Milestones'] = [] ; 
+                    milestones.forEach(ele => {
+                        init['Milestones'].push(ele.dataValues);
+                     }); 
+                 });
+                }
+             }
+           }
+         };
+         
         res.status(200).json({
             message : 'Dashboard fetched successfully',
             Body : await calculateValues(fetchedRows)
@@ -75,34 +98,43 @@ exports.getDashboard = async (req , res , next) => {
         }) ; 
      }
 }
-
 calculateValues = async (fetchedRows) => {
     let response = []; 
     fetchedRows.forEach(ele => {
-        let goals = 0 ,objs = 0 , inits = 0 ; 
+        let pres = 0 , goals = 0 ,objs = 0 , inits = 0 ; 
         if(ele.Goals.length){
             ele.Goals.forEach(goal =>{
-                goals+=goal.Progress;
                 if(goal.Objectives.length){
                     goal.Objectives.forEach(obj => {
-                        objs+=obj.Progress;
                         if(obj.Initiatives.length){
                             obj.Initiatives.forEach(init =>{
+                                let milestone = 0;
+                                if(init.Milestones.length){
+                                    init.Milestones.forEach(mile =>{
+                                        milestone+=mile.Progress;
+                                    });
+                                    milestone = Math.ceil((milestone / (init.Milestones.length * 100)) * 100);
+                                    init['Progress'] = milestone;
+                                }
                                 inits+=init.Progress;
                             });
                             inits = Math.ceil((inits / (obj.Initiatives.length * 100)) * 100);
                         }
+                        objs+=inits;
                     });
                     objs = Math.ceil((objs / (goal.Objectives.length * 100)) * 100);
                 }
+                goals+=objs;
             }); 
             goals =Math.ceil((goals / (ele.Goals.length * 100) ) * 100);
+            pres += goals; 
         }
+        pres = Math.ceil((pres / (fetchedRows.length * 100)) * 100 ); 
         response.push({
             DirectiveID : ele.ID ,
             DirectiveName : ele.PerspectiveName,
-            DirectiveProgress : ele.Progress,
-            DirectiveColor : common.assignColor(ele.Progress) ,
+            DirectiveProgress : pres,
+            DirectiveColor : common.assignColor(pres) ,
             GoalsProgress : goals ,
             GoalsColor : common.assignColor(goals) , 
             ObjectivesProgress : objs, 

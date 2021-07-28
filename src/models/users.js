@@ -1,9 +1,11 @@
 const  Sequelize  = require('sequelize');
+const  organizations  = require('../models/organizations');
 const Users = sequelize.define('user',{
     ID:{
         type : Sequelize.UUID ,
         primaryKey: true,
-        allowNull : false 
+        allowNull : false ,
+        defaultValue: Sequelize.UUIDV4,
     },
     username:{
         type : Sequelize.STRING
@@ -20,6 +22,18 @@ const Users = sequelize.define('user',{
     email:{
         type : Sequelize.STRING
     },
+    isAdmin:{
+        type : Sequelize.BOOLEAN
+    },
+    role:{
+        type : Sequelize.INTEGER
+    },
+    isActive : {
+        type : Sequelize.BOOLEAN
+    },
+    ParentID :{
+        type : Sequelize.STRING
+    }
 });
 
 module.exports = Users; 

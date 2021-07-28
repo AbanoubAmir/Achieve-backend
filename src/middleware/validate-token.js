@@ -2,9 +2,6 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config(); 
 module.exports = (req , res , next) => {
     try {
-        console.log(req.headers);
-        console.log(process.env.JWTSecretKey);
-
         const token = req.headers.authorization.split(" ")[1]; 
         const decodedtoken = jwt.verify(token,process.env.JWTSecretKey) ; 
         req.UserData = {

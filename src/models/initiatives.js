@@ -8,11 +8,7 @@ const Initiatives = sequelize.define('initiative',{
     },
     InitiativeName:{
         type : Sequelize.STRING
-    },
-    Progress:{
-        type:Sequelize.INTEGER,
-        defaultValue: '0'
-    }  
+    }
 });
 Initiatives.belongsTo(Objectives, {as: 'Parent'}); // Adds organizations to user rather than organizationsID
 module.exports = Initiatives; 
