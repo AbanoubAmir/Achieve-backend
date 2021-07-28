@@ -3,7 +3,6 @@ const prespectives = require('../models/prespectives');
 const goals = require('../models/goals'); 
 const objectives = require('../models/objectives');
 
-
 exports.getPlanStrucutre = async (req , res , next) => {
 
  try{

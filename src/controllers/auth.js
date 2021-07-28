@@ -1,35 +1,44 @@
 //importing the packs
 const jwt = require('jsonwebtoken'); 
 require('dotenv').config();
-
+const bcrypt = require('bcrypt');
 //importing needed models 
 const users = require('../models/users'); 
 
-
 exports.login = async (req , res , next) => {
     let fetchedUser = {};
+
     await users.findOne({
         where: {
             username: req.body.Username,
-            password:req.body.Password
-    }}).then((user)=>{
+            isActive : true
+        }}).then((user)=>{
+        if(user)
         fetchedUser = user.dataValues;
+        else
+        fetchedUser = null;
     });
+
     if(fetchedUser !== null){
+
+        let comparePass = await bcrypt.compare(req.body.Password , fetchedUser.password); 
+        if(!comparePass)
+        res.status(400).json({ message : 'Invalid username or password'});
+
         const token = jwt.sign({
             username: fetchedUser.username,
             name: fetchedUser.firstname + '' + fetchedUser.lastname,
             email: fetchedUser.email,
-            type:'Employee',
-            isAdmin : false , 
+            role:fetchedUser.role,
+            isAdmin : fetchedUser.isAdmin , 
             message:'logged in successfully'
     } , process.env.JWTSecretKey, {expiresIn:'1d'});
         res.status(200).json({
                 username: fetchedUser.username,
                 name: fetchedUser.firstname + '' + fetchedUser.lastname,
                 email: fetchedUser.email,
-                type:'Employee',
-                isAdmin : false , 
+                role: fetchedUser.role,
+                isAdmin: fetchedUser.isAdmin , 
                 token:token,
                 message:'logged in successfully'
         }); 
@@ -55,3 +64,16 @@ exports.getProfile = async (req , res , next) => {
         }); 
     
 }
+
+// exports.create = async (req , res , next) => {
+//     const roles = require ('../models/users');
+// const bcrypt = require('bcrypt');
+// let hashedPass = await bcrypt.hash('123' , 10);
+// roles.bulkCreate([
+//     { username: 'SuperAdmin', firstname: 'Admin' , lastname : 'Admin' , email:'test@test.com' , password :hashedPass , isAdmin : true , isActive : true , ParentID : 'Org_01', role : 1  }
+//   ]).then(() => { // Notice: There are no arguments here, as of right now you'll have to...
+//     return roles.findAll();
+//   }).then(users => {
+//     console.log(users) // ... in order to get the array of user objects
+//   })
+// }
