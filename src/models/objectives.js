@@ -10,6 +10,7 @@ const Objectives = sequelize.define('objective',{
         type : Sequelize.STRING
     }
 });
-Objectives.belongsTo(Goals, {as: 'Parent'}); // Adds organizations to user rather than organizationsID
+Objectives.belongsTo(Goals); // Adds organizations to user rather than organizationsID
+Goals.hasMany(Goals); // Adds organizations to user rather than organizationsID
 
 module.exports = Objectives; 

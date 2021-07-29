@@ -42,5 +42,7 @@ const Milestones = sequelize.define('milestones',{
         defaultValue: '0'
     } 
 });
-Milestones.belongsTo(Initiatives, {as: 'Parent'}); // Adds organizations to user rather than organizationsID
+Milestones.belongsTo(Initiatives); // Adds organizations to user rather than organizationsID
+Initiatives.hasMany(Milestones); // Adds organizations to user rather than organizationsID
+
 module.exports = Milestones;

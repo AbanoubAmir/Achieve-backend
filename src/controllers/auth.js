@@ -70,10 +70,11 @@ exports.getProfile = async (req , res , next) => {
 // const bcrypt = require('bcrypt');
 // let hashedPass = await bcrypt.hash('123' , 10);
 // roles.bulkCreate([
-//     { username: 'SuperAdmin', firstname: 'Admin' , lastname : 'Admin' , email:'test@test.com' , password :hashedPass , isAdmin : true , isActive : true , ParentID : 'Org_01', role : 1  }
+//     { username: 'SuperAdmin', firstname: 'Admin' , lastname : 'Admin' , email:'test@test.com' , password :hashedPass , isAdmin : true , isActive : true , organizationID : 'Org_01', role : 1 , isResetPassword:false  }
 //   ]).then(() => { // Notice: There are no arguments here, as of right now you'll have to...
 //     return roles.findAll();
 //   }).then(users => {
 //     console.log(users) // ... in order to get the array of user objects
 //   })
 // }
+

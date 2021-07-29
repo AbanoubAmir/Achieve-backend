@@ -31,9 +31,10 @@ const Users = sequelize.define('user',{
     isActive : {
         type : Sequelize.BOOLEAN
     },
-    ParentID :{
-        type : Sequelize.STRING
+    isResetPassword : {
+        type : Sequelize.BOOLEAN
     }
 });
-
+Users.belongsTo(organizations); // Adds organizations to user rather than organizationsID
+organizations.hasMany(Users);
 module.exports = Users; 

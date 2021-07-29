@@ -17,7 +17,7 @@ exports.getPlanStrucutre = async (req , res , next) => {
     for(let row of fetchedRows){
        await goals.findAll({
             where: {
-                ParentID: row.ID 
+                prespectiveID: row.ID 
             },
             attributes: ['ID', 'GoalName']
         }).then((goals)=>{
@@ -32,7 +32,7 @@ exports.getPlanStrucutre = async (req , res , next) => {
         for(let goal of row['Goals']){
             await objectives.findAll({
                 where: {
-                    ParentID: goal.ID 
+                    goalID: goal.ID 
                 },
                 attributes: ['ID', 'ObjectiveName']
             }).then((objectives)=>{

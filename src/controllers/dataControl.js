@@ -13,11 +13,12 @@ const initiatives = require('../models/initiatives');
 exports.DataIntegration= async (req , res , next) =>{
     let workbook = new Excel.Workbook() ;
     workbook.xlsx.readFile('C:/test.xlsx').then(()=>{
-      workbook.eachSheet( async (worksheet , sheetId)=>{
+      workbook.eachSheet( async (worksheet , sheetId)=>{  
+          console.log(sheetId);
         let dataArray = await changeRowsToDict(worksheet);  
-          if(sheetId === 1)
+          if(sheetId === 28)
             await organizations.bulkCreate(dataArray); 
-          if(sheetId === 2)
+            if(sheetId === 2)
             await prespectives.bulkCreate(dataArray); 
           if(sheetId === 3)
             await goals.bulkCreate(dataArray); 
@@ -25,8 +26,9 @@ exports.DataIntegration= async (req , res , next) =>{
             await objectives.bulkCreate(dataArray); 
           if(sheetId === 5)
             await initiatives.bulkCreate(dataArray);   
-          if(sheetId === 6)
+          if(sheetId === 27)
             await milestones.bulkCreate(dataArray);
+
         });
     });
     res.status(200).json({

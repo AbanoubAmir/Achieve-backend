@@ -24,6 +24,7 @@ const authRoutes = require('./routes/auth');
 const initRoutes = require('./routes/initiatives'); 
 const dataControlRoutes = require('./routes/dataControl'); 
 const plan_structureRoutes = require('./routes/plan-structure');
+const organizations_structureRoutes = require('./routes/organization-structure');
 const dashboardRoutes = require('./routes/dashboard');
 
 //make the app listen to port 8000
@@ -52,6 +53,7 @@ app.use('/api/auth',authRoutes);
 app.use('/api/initiatives',initRoutes); 
 app.use('/api/dataControl',dataControlRoutes); 
 app.use('/api/plan-structure',plan_structureRoutes); 
+app.use('/api/organization-structure',organizations_structureRoutes); 
 app.use('/api/dashboard',dashboardRoutes); 
 
 module.exports = app ;

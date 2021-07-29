@@ -10,4 +10,6 @@ module.exports = sequelize;
 
 global.sequelize = sequelize;   
 
+const s = require('../models/sub-departments');
+
   

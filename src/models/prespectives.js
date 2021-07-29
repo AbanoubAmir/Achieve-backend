@@ -13,5 +13,6 @@ const Pres = sequelize.define('prespective',{
         type : Sequelize.STRING
     }
 });
-Pres.belongsTo(organizations, {as: 'Parent'}); // Adds organizations to user rather than organizationsID
+Pres.belongsTo(organizations); // Adds organizations to user rather than organizationsID
+organizations.hasMany(Pres);
 module.exports = Pres; 
