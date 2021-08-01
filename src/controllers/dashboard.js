@@ -11,81 +11,15 @@ exports.getDashboard = async (req , res , next) => {
     try{
         let fetchedRows = [] ; 
         //list all the prespectives
-        await prespectives.findAll({attributes: ['ID', 'PerspectiveName']}).then((prespectives)=>{
+        await prespectives.findAll(
+        {
+            attributes: ['ID', 'PerspectiveName'],
+            include:[{model:goals , include:[{model:objectives , include :[{model:initiatives , include:[milestones]}]}]}]
+        }).then((prespectives)=>{
             prespectives.forEach(ele => {
                 fetchedRows.push(ele.dataValues);
             }); 
         });
-        // list all the goals 
-        for(let row of fetchedRows){
-           await goals.findAll({
-                where: {
-                    ParentID: row.ID 
-                },
-                attributes: ['ID', 'GoalName']
-            }).then((goals)=>{
-                row['Goals'] = [] ; 
-                goals.forEach(ele => {
-                    row['Goals'].push(ele.dataValues);
-                }); 
-            });
-        };
-        //list all the objectives
-        for(let row of fetchedRows){
-            for(let goal of row['Goals']){
-                await objectives.findAll({
-                    where: {
-                        ParentID: goal.ID 
-                    },
-                    attributes: ['ID', 'ObjectiveName']
-                }).then((objectives)=>{
-                    goal['Objectives'] = [] ; 
-                    objectives.forEach(ele => {
-                        goal['Objectives'].push(ele.dataValues);
-                    }); 
-                });
-            }
-          
-        };
-        //list all the initiatives
-        for(let row of fetchedRows){
-           for(let goal of row['Goals']){
-            for(let obj of goal['Objectives']){
-                await initiatives.findAll({
-                    where: {
-                        ParentID: obj.ID 
-                    },
-                    attributes: ['ID', 'InitiativeName']
-                }).then((initiatives)=>{
-                    obj['Initiatives'] = [] ; 
-                    initiatives.forEach(ele => {
-                        obj['Initiatives'].push(ele.dataValues);
-                    }); 
-                });
-            }
-          }
-        };
-        //list all the milestones
-        for(let row of fetchedRows){
-            for(let goal of row['Goals']){
-             for(let obj of goal['Objectives']){
-                for(let init of obj['Initiatives']){
-                 await milestones.findAll({
-                     where: {
-                         ParentID: init.ID 
-                     },
-                     attributes: ['ID' , 'Progress']
-                 }).then((milestones)=>{
-                    init['Milestones'] = [] ; 
-                    milestones.forEach(ele => {
-                        init['Milestones'].push(ele.dataValues);
-                     }); 
-                 });
-                }
-             }
-           }
-         };
-         
         res.status(200).json({
             message : 'Dashboard fetched successfully',
             Body : await calculateValues(fetchedRows)
@@ -102,31 +36,31 @@ calculateValues = async (fetchedRows) => {
     let response = []; 
     fetchedRows.forEach(ele => {
         let pres = 0 , goals = 0 ,objs = 0 , inits = 0 ; 
-        if(ele.Goals.length){
-            ele.Goals.forEach(goal =>{
-                if(goal.Objectives.length){
-                    goal.Objectives.forEach(obj => {
-                        if(obj.Initiatives.length){
-                            obj.Initiatives.forEach(init =>{
+        if(ele.goals.length){
+            ele.goals.forEach(goal =>{
+                if(goal.objectives.length){
+                    goal.objectives.forEach(obj => {
+                        if(obj.initiatives.length){
+                            obj.initiatives.forEach(init =>{
                                 let milestone = 0;
-                                if(init.Milestones.length){
-                                    init.Milestones.forEach(mile =>{
+                                if(init.milestones.length){
+                                    init.milestones.forEach(mile =>{
                                         milestone+=mile.Progress;
                                     });
-                                    milestone = Math.ceil((milestone / (init.Milestones.length * 100)) * 100);
+                                    milestone = Math.ceil((milestone / (init.milestones.length * 100)) * 100);
                                     init['Progress'] = milestone;
                                 }
                                 inits+=init.Progress;
                             });
-                            inits = Math.ceil((inits / (obj.Initiatives.length * 100)) * 100);
+                            inits = Math.ceil((inits / (obj.initiatives.length * 100)) * 100);
                         }
                         objs+=inits;
                     });
-                    objs = Math.ceil((objs / (goal.Objectives.length * 100)) * 100);
+                    objs = Math.ceil((objs / (goal.objectives.length * 100)) * 100);
                 }
                 goals+=objs;
             }); 
-            goals =Math.ceil((goals / (ele.Goals.length * 100) ) * 100);
+            goals =Math.ceil((goals / (ele.goals.length * 100) ) * 100);
             pres += goals; 
         }
         pres = Math.ceil((pres / (fetchedRows.length * 100)) * 100 ); 

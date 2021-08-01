@@ -31,6 +31,7 @@ exports.login = async (req , res , next) => {
             email: fetchedUser.email,
             role:fetchedUser.role,
             isAdmin : fetchedUser.isAdmin , 
+            ID : fetchedUser.ID,
             message:'logged in successfully'
     } , process.env.JWTSecretKey, {expiresIn:'1d'});
         res.status(200).json({
