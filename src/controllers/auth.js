@@ -32,14 +32,19 @@ exports.login = async (req , res , next) => {
             role:fetchedUser.role,
             isAdmin : fetchedUser.isAdmin , 
             ID : fetchedUser.ID,
-            message:'logged in successfully'
-    } , process.env.JWTSecretKey, {expiresIn:'1d'});
+            selectedType : fetchedUser.selectedType,
+            selectedDate : fetchedUser.selectedDate,
+            defaultPage : fetchedUser.defaultPage
+        } , process.env.JWTSecretKey, {expiresIn:'1d'});
         res.status(200).json({
                 username: fetchedUser.username,
                 name: fetchedUser.firstname + '' + fetchedUser.lastname,
                 email: fetchedUser.email,
                 role: fetchedUser.role,
                 isAdmin: fetchedUser.isAdmin , 
+                selectedType : fetchedUser.selectedType,
+                selectedDate : fetchedUser.selectedDate,
+                defaultPage : fetchedUser.defaultPage,
                 token:token,
                 message:'logged in successfully'
         }); 

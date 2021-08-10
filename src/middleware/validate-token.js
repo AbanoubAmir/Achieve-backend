@@ -8,7 +8,10 @@ module.exports = (req , res , next) => {
             username : decodedtoken.username,
             name : decodedtoken.name ,  
             email : decodedtoken.email ,      
-            ID : decodedtoken.ID ,                         
+            ID : decodedtoken.ID ,                   
+            selectedType : decodedtoken.selectedType,
+            selectedDate : decodedtoken.selectedDate,
+            defaultPage : decodedtoken.defaultPage      
         }; 
         req.errorfiles = [] ;
         next() ; 
