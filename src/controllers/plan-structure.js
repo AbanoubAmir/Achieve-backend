@@ -18,7 +18,7 @@ exports.getPlanStrucutre = async (req , res , next) => {
     });
     res.status(200).json({
         message : 'Plan Structre fetched successfully',
-        Body : fetchedRows
+        body : fetchedRows
     }); 
  }
  catch (error){

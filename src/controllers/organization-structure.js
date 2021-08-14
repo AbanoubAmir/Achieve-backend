@@ -17,7 +17,7 @@ exports.getOrganizationsStrucutre = async (req , res , next) => {
     });
     res.status(200).json({
         message : 'Organizations Structre fetched successfully',
-        Body : fetchedRows
+        body : fetchedRows
     }); 
  }
  catch (error){

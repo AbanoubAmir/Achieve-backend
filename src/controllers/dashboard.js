@@ -22,7 +22,7 @@ exports.getDashboard = async (req , res , next) => {
         });
         res.status(200).json({
             message : 'Dashboard fetched successfully',
-            Body : await calculateValues(fetchedRows)
+            body : await calculateValues(fetchedRows)
         }); 
      }
      catch (error){

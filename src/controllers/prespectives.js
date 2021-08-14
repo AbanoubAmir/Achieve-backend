@@ -19,7 +19,7 @@ exports.getDirectiveDetails = async (req , res , next)=>{
     let month , year , limit = 4;
     let progressWhere = []; 
     if(dateType === 'Monthly'){
-        date = common.getMonth(date);
+        date = common.getDate(date , dateType);
         month = date[0] ; 
         year = date[1] ; 
         progressWhere = [
@@ -33,7 +33,7 @@ exports.getDirectiveDetails = async (req , res , next)=>{
         ]; 
     }
     if(dateType === 'Quarterly'){
-        date = common.getMonthQuarter(date);
+        date = common.allQuarters(date);
         month = date[0] ; 
         year = date[1] ; 
         progressWhere = [
