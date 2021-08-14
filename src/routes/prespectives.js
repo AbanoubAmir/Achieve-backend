@@ -1,7 +1,6 @@
 const router = require('express').Router() ;
-const dashboardCtrl = require('../controllers/dashboard'); 
+const presCtrl = require('../controllers/prespectives'); 
 const validateToken = require('../middleware/validate-token');
 
-router.get('' ,validateToken, dashboardCtrl.getDashboard) ;
-
+router.get('/:id' , validateToken ,presCtrl.getDirectiveDetails) ;
 module.exports = router;

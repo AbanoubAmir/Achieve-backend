@@ -1,4 +1,4 @@
-const  Sequelize  = require('sequelize');
+const Sequelize  = require('sequelize');
 const departments = require('./departments');
 const Sub = sequelize.define('sub_department',{
     ID:{

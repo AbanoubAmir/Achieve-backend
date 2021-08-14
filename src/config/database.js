@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize') ; 
-const sequelize = new Sequelize('achieve' , 'achieveAdmin@achieve-db' , 'Al_Ahly74', {
-    host:'achieve-db.mysql.database.azure.com',
+require('dotenv').config();
+const sequelize = new Sequelize(process.env.AchieveDBSchemaProd , process.env.AchieveDBUser ,process.env.AchieveDBPassword, {
+    host:process.env.AchieveDBUrl,
     dialect : 'mysql',
 }); 
 
@@ -9,7 +10,3 @@ const sequelize = new Sequelize('achieve' , 'achieveAdmin@achieve-db' , 'Al_Ahly
 module.exports = sequelize; 
 
 global.sequelize = sequelize;   
-
-const s = require('../models/sub-departments');
-
-  

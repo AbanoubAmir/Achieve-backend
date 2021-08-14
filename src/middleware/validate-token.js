@@ -4,10 +4,14 @@ module.exports = (req , res , next) => {
     try {
         const token = req.headers.authorization.split(" ")[1]; 
         const decodedtoken = jwt.verify(token,process.env.JWTSecretKey) ; 
-        req.UserData = {
-            Username : decodedtoken.username,
+        req.userData = {
+            username : decodedtoken.username,
             name : decodedtoken.name ,  
-            email : decodedtoken.email ,             
+            email : decodedtoken.email ,      
+            ID : decodedtoken.ID ,                   
+            selectedType : decodedtoken.selectedType,
+            selectedDate : decodedtoken.selectedDate,
+            defaultPage : decodedtoken.defaultPage      
         }; 
         req.errorfiles = [] ;
         next() ; 

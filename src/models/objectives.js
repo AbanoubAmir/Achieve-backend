@@ -11,6 +11,6 @@ const Objectives = sequelize.define('objective',{
     }
 });
 Objectives.belongsTo(Goals); // Adds organizations to user rather than organizationsID
-Goals.hasMany(Goals); // Adds organizations to user rather than organizationsID
+Goals.hasMany(Objectives); // Adds organizations to user rather than organizationsID
 
 module.exports = Objectives; 

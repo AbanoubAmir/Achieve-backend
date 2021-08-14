@@ -33,6 +33,15 @@ const Users = sequelize.define('user',{
     },
     isResetPassword : {
         type : Sequelize.BOOLEAN
+    },
+    selectedType : {
+        type : Sequelize.STRING
+    },
+    selectedDate : {
+        type : Sequelize.STRING
+    },
+    defaultPage : {
+        type : Sequelize.STRING
     }
 });
 Users.belongsTo(organizations); // Adds organizations to user rather than organizationsID
