@@ -27,9 +27,9 @@ const plan_structureRoutes = require('./routes/plan-structure');
 const organizations_structureRoutes = require('./routes/organization-structure');
 const dashboardRoutes = require('./routes/dashboard');
 const admindashboardRoutes = require('./routes/admindashboard');
-
 const usersRoutes = require('./routes/users');
 const prespectivesRoutes = require('./routes/prespectives');
+const milestonesRoutes = require('./routes/milestones');
 
 //make the app listen to port 8000
 app.listen(port , ()=>{
@@ -62,5 +62,6 @@ app.use('/api/dashboard',dashboardRoutes);
 app.use('/api/admindashboard',admindashboardRoutes); 
 app.use('/api/users',usersRoutes); 
 app.use('/api/prespectives',prespectivesRoutes); 
+app.use('/api/milestones',milestonesRoutes); 
 
 module.exports = app ;

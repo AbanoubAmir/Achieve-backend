@@ -1,6 +1,7 @@
 //import needed packs
 const  Sequelize  = require('sequelize');
 const common = require('../shared/commonMethods');
+
 //import needed models 
 const prespectives = require('../models/prespectives');
 const goals = require('../models/goals');
@@ -9,7 +10,6 @@ const initiatives = require('../models/initiatives');
 const milestones = require('../models/milestones');
 const milestone_progress = require('../models/progress');
 const sequelize = require('../config/database');
-const Initiatives = require('../models/initiatives');
 
 exports.getDirectiveDetails = async (req , res , next)=>{
     let fetchedRow = {} ;
@@ -165,7 +165,7 @@ async function calculateValues (prespective ,date ,  type , limit){
                     objs.forEach((objective , i) => {
                         objective.progress = Math.ceil((objective.progress / (obj.initiatives.length * 100)) * 100) ; 
                         objective.color = common.assignColor(objective.progress); 
-                         goalss[i].progress += objective.progress ; 
+                        goalss[i].progress += objective.progress ; 
                     });
                     initiativesTotalCount+=obj.initiatives.length ; 
                 }

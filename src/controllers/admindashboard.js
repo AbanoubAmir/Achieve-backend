@@ -81,7 +81,6 @@ exports.putDashboard = async (req,res,next) => {
      }
     
 }
-
 exports.deleteDashboard = async (req,res,next)=>{
     try {
         const obj = require('../models/'+req.params.tablename); 
