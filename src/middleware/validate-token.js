@@ -11,7 +11,9 @@ module.exports = (req , res , next) => {
             ID : decodedtoken.ID ,                   
             selectedType : decodedtoken.selectedType,
             selectedDate : decodedtoken.selectedDate,
-            defaultPage : decodedtoken.defaultPage      
+            defaultPage : decodedtoken.defaultPage ,
+            organizationID : decodedtoken.organizationID,
+            isAdmin : decodedtoken.isAdmin     
         }; 
         req.errorfiles = [] ;
         next() ; 

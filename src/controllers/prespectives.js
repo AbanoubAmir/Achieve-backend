@@ -16,7 +16,7 @@ exports.getDirectiveDetails = async (req , res , next)=>{
     let dateType =  req.userData.selectedType ; 
     let date =  req.userData.selectedDate ; 
     let orignalDate = req.userData.selectedDate ; 
-    let month , year , limit = 4;
+    let month , year , limit = await common.getLimit(req.userData.organizationID);
     let progressWhere = []; 
     if(dateType === 'Monthly'){
         date = common.getDate(date , dateType);
@@ -33,14 +33,14 @@ exports.getDirectiveDetails = async (req , res , next)=>{
         ]; 
     }
     if(dateType === 'Quarterly'){
-        date = common.allQuarters(date);
+        date = await common.allQuarters(date , req.userData.organizationID);
         month = date[0] ; 
         year = date[1] ; 
         progressWhere = [
             sequelize.where(Sequelize.fn('MONTH' , Sequelize.col('progress.progressDate')), {[Sequelize.Op.or] : month}),
         ]; 
     }
-      //list all the prespectives
+    //list all the prespectives
     await prespectives.findOne(
         {
             attributes: ['ID', 'PerspectiveName'],

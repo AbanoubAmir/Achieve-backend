@@ -17,8 +17,8 @@ exports.getDashboard = async (req , res , next) => {
         let fetchedRows = [] ; 
         let dateType =  req.userData.selectedType ; 
         let date =  req.userData.selectedDate ; 
-        let month , year , limit = 4;
-        date = common.getDate(date , dateType);
+        let month , year , limit = await common.getLimit(req.userData.organizationID);
+        date = await common.getDate(date , dateType , req.userData.organizationID);
         month = date[0] ; 
         year = date[1] ; 
 

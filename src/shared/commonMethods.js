@@ -1,3 +1,5 @@
+const settings = require('../models/settings');
+
 exports.assignColor = (progressVal) =>{
     if(progressVal < 50)
         return "#f44336";
@@ -8,7 +10,8 @@ exports.assignColor = (progressVal) =>{
     else 
         return "#4caf50";    
 }
-exports.getDate = (month , type) => {
+
+exports.getDate = async (month , type , orgID) => {
     if(type === 'Monthly'){
         let months = [`Jan`, `Feb`, `Mar`, `Apr`, `May`, `Jun`, `Jul`,`Aug`, `Sep`, `Oct`, `Nov`, `Dec`];
         let chosenMonth = month.split('-')[0] ; 
@@ -16,18 +19,64 @@ exports.getDate = (month , type) => {
         return [months.indexOf(chosenMonth)+1 , year];
     }
     else if(type === 'Yearly'){
-        return [new Date().getMonth(),year];
+        return [new Date().getMonth()+1,year];
     }
     else if(type === 'Quarterly'){
-        let quarters = [3,6,9,12] ; 
-        let chosenQuarter = Quarter.split('-')[0];
-        let year = Quarter.split('-')[1] ; 
+        let quarters = [] ; 
+        let months = [`Jan`, `Feb`, `Mar`, `Apr`, `May`, `Jun`, `Jul`,`Aug`, `Sep`, `Oct`, `Nov`, `Dec`];
+
+        await settings.findOne({
+            where : {
+                organizationID : orgID
+            }
+        }).then((result)=>{
+            quarters.push(result.dataValues.firstQuarterEnd);
+            quarters.push(result.dataValues.secondQuarterEnd);
+            quarters.push(result.dataValues.thirdQuarterEnd);
+            quarters.push(result.dataValues.forthQuarterEnd);
+        });
+        for(let i = 0 ; i < quarters.length ;i++){
+            quarters[i] = months.indexOf(quarters[i].split('-')[0])+1;
+        }
+        let chosenQuarter = month.split('-')[0];
+        let year = month.split('-')[1]; 
+        console.log([quarters[chosenQuarter[1]-1] , year]);
         return [quarters[chosenQuarter[1]-1] , year];  
     }
 }
-exports.allQuarters = (Quarter) => {
+
+exports.allQuarters = async (Quarter , orgID) => {
+    let quarters = [] ; 
+    let months = [`Jan`, `Feb`, `Mar`, `Apr`, `May`, `Jun`, `Jul`,`Aug`, `Sep`, `Oct`, `Nov`, `Dec`];
+    await settings.findOne({
+        where : {
+            organizationID : orgID
+        }
+    }).then((result)=>{
+        quarters.push(result.dataValues.firstQuarterEnd);
+        quarters.push(result.dataValues.secondQuarterEnd);
+        quarters.push(result.dataValues.thirdQuarterEnd);
+        quarters.push(result.dataValues.forthQuarterEnd);
+    });
+    for(let i = 0 ; i < quarters.length ;i++){
+        quarters[i] = months.indexOf(quarters[i].split('-')[0])+1;
+    }
     let year = Quarter.split('-')[1] ; 
-    return [[3,6,9,12] , year];    
+    console.log([quarters , year]);
+    return [quarters , year];    
+}
+
+exports.getLimit = async (orgID) => {
+    let limit = 0 ; 
+    await settings.findOne({
+        where : {
+            organizationID : orgID
+        }
+    }).then((result)=>{
+        limit = result.dataValues.limit;
+    });
+
+    return limit;    
 }
 
 exports.getHistoricalLabels = (Date , dateType , limit) => {

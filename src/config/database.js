@@ -6,7 +6,6 @@ const sequelize = new Sequelize(process.env.AchieveDBSchemaProd , process.env.Ac
 }); 
 
 // sequelize.sync() ;
-
 module.exports = sequelize; 
 
 global.sequelize = sequelize;   

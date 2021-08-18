@@ -34,7 +34,8 @@ exports.login = async (req , res , next) => {
             ID : fetchedUser.ID,
             selectedType : fetchedUser.selectedType,
             selectedDate : fetchedUser.selectedDate,
-            defaultPage : fetchedUser.defaultPage
+            defaultPage : fetchedUser.defaultPage,
+            organizationID : fetchedUser.organizationID
         } , process.env.JWTSecretKey, {expiresIn:'1d'});
         res.status(200).json({
                 username: fetchedUser.username,

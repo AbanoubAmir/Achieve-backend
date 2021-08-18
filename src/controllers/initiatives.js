@@ -16,8 +16,8 @@ exports.getInitiatives = async (req , res , next) =>{
     let fetchedRows = [] ;
     let dateType =  req.userData.selectedType ; 
     let date =  req.userData.selectedDate ; 
-    let month , year , limit = 4;
-    date = common.getDate(date , dateType);
+    let month , year , limit = await common.getLimit(req.userData.organizationID);
+    date = await common.getDate(date , dateType , req.userData.organizationID);
     month = date[0] ; 
     year = date[1] ; 
     await prespectives.findAll(
@@ -72,8 +72,8 @@ exports.getInitiativeDetails = async (req , res , next) =>{
     let fetchedRow = {} ;
     let dateType =  req.userData.selectedType ; 
     let date =  req.userData.selectedDate ; 
-    let month , year , limit = 4;
-    date = common.getDate(date , dateType);
+    let month , year , limit = await common.getLimit(req.userData.organizationID);
+    date = await common.getDate(date , dateType , req.userData.organizationID);
     month = date[0] ; 
     year = date[1] ; 
     await initiatives.findOne(
@@ -106,7 +106,7 @@ exports.getInitiativeDetails = async (req , res , next) =>{
               }]
             }]
         }).then((initiative)=>{
-            fetchedRow=initiative.dataValues;
+            fetchedRow = initiative.dataValues;
      }); 
       res.status(200).json({
         message : 'Inititavies Details fetched successfully',

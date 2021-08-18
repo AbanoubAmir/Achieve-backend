@@ -49,6 +49,7 @@ exports.updateMilestoneProgressExpenses = async (req , res , next) => {
     }
 }
 
+//update milestone progress
 updateMilestoneProgress = async (progress , updatedProgress , milestone)=>{
     let Updated = true ; 
     let month = new Date().getMonth() + 1; 
@@ -89,12 +90,12 @@ updateMilestoneProgress = async (progress , updatedProgress , milestone)=>{
         return Updated ; 
     }
 }
+
+//update milestone spent budget
 updateMilestoneBudget = async (updatedBudget , milestone)=>{
     let Updated = true  ; 
-    console.log(updatedBudget);
-    if(updatedBudget == 0 || updatedBudget == '' ){
+    if(updatedBudget == 0 || updatedBudget == '' )
         return Updated ; 
-    }
     try{
         await milestones.update({
                 SpentBudget : updatedBudget
