@@ -1,4 +1,3 @@
-
 exports.getDashboard = async (req , res , next) => {
     try {
         console.log(req.url);
@@ -7,13 +6,13 @@ exports.getDashboard = async (req , res , next) => {
         {
             res.status(200).json({
                 message : tableName+' fetched successfully',
-                Body : await GetRows(tableName)
+                body : await GetRows(tableName)
             });
         }
         else{
             res.status(200).json({
                 message : tableName+' fetched successfully',
-                Body : await GetRowsById(tableName, req.query.Id)
+                body : await GetRowsById(tableName, req.query.Id)
             });
         }
     } catch (error) {
@@ -28,7 +27,7 @@ exports.postDashboard = async (req,res,next) => {
         const obj = require('../models/'+req.params.tablename); 
         if(req.params.tablename!="users")
         {
-            obj.create(req.body.Data).then( updatedRecord => {
+            obj.create(req.body).then( updatedRecord => {
                 console.log(`updated record ${JSON.stringify(updatedRecord,null,2)}`)
                 res.status(200).json({
                     message:'Record added Successfully',
@@ -40,7 +39,6 @@ exports.postDashboard = async (req,res,next) => {
         {
             req.body.Data['password'] = Math.random().toString(36).substr(2, 8);
             obj.create(req.body.Data).then( updatedRecord => {
-            console.log(`updated record ${JSON.stringify(updatedRecord,null,2)}`)
             res.status(200).json({
                 message:'Record added Successfully',
                 body: updatedRecord
@@ -65,9 +63,8 @@ exports.putDashboard = async (req,res,next) => {
       }
 
       record.update(req.body.Data).then( updatedRecord => {
-        console.log(`updated record ${JSON.stringify(updatedRecord,null,2)}`)
         res.status(200).json({
-            message:'Settings updated Successfully',
+            message:req.params.tablename+'updated Successfully',
             body: updatedRecord
       });
       })    
@@ -85,7 +82,7 @@ exports.deleteDashboard = async (req,res,next)=>{
     try {
         const obj = require('../models/'+req.params.tablename); 
         await obj.destroy({
-            where: {id: req.body.ID}
+            where: {id: req.query.ID}
         }).then(deleteStatus => {
             res.status(200).json({
                 message:'Record deleted Successfully',

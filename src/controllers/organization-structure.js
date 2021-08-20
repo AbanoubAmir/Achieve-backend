@@ -1,7 +1,7 @@
 //import needed models
 const organizations = require('../models/organizations'); 
 const departments = require('../models/departments'); 
-const sub_departments = require('../models/sub-departments');
+const sub_departments = require('../models/sub_departments');
 
 exports.getOrganizationsStrucutre = async (req , res , next) => {
  try{
