@@ -28,7 +28,6 @@ exports.postDashboard = async (req,res,next) => {
         if(req.params.tablename!="users")
         {
             obj.create(req.body).then( updatedRecord => {
-                console.log(`updated record ${JSON.stringify(updatedRecord,null,2)}`)
                 res.status(200).json({
                     message:'Record added Successfully',
                     body: updatedRecord
