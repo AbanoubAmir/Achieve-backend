@@ -63,7 +63,7 @@ exports.putDashboard = async (req,res,next) => {
 
       record.update(req.body.Data).then( updatedRecord => {
         res.status(200).json({
-            message:req.params.tablename+'updated Successfully',
+            message:req.params.tablename+' updated Successfully',
             body: updatedRecord
       });
       })    

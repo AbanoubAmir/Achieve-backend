@@ -29,10 +29,12 @@ const Users = sequelize.define('user',{
         type : Sequelize.INTEGER
     },
     isActive : {
-        type : Sequelize.BOOLEAN
+        type : Sequelize.BOOLEAN,
+        defaultValue : true
     },
     isResetPassword : {
-        type : Sequelize.BOOLEAN
+        type : Sequelize.BOOLEAN,
+        defaultValue : false
     },
     selectedType : {
         type : Sequelize.STRING

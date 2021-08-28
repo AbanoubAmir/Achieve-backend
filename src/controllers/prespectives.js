@@ -13,15 +13,15 @@ const sequelize = require('../config/database');
 
 exports.getDirectiveDetails = async (req , res , next)=>{
     let fetchedRow = {} ;
-    let dateType =  req.userData.selectedType ; 
-    let date =  req.userData.selectedDate ; 
-    let orignalDate = req.userData.selectedDate ; 
+    let dateType =  req.headers.selectedtype ; 
+    let date =  req.headers.selecteddate ; 
+    let orignalDate = req.headers.selecteddate ; 
     let month , year , limit = await common.getLimit(req.userData.organizationID);
     let progressWhere = []; 
     if(dateType === 'Monthly'){
-        date = common.getDate(date , dateType);
+        date = await common.getDate(date , dateType);
         month = date[0] ; 
-        year = date[1] ; 
+        year  = date[1] ;
         progressWhere = [
             sequelize.where(Sequelize.fn('MONTH' , Sequelize.col('progress.progressDate')), {[Sequelize.Op.lte] : month}),
         ]; 
@@ -33,12 +33,28 @@ exports.getDirectiveDetails = async (req , res , next)=>{
         ]; 
     }
     if(dateType === 'Quarterly'){
-        date = await common.allQuarters(date , req.userData.organizationID);
-        month = date[0] ; 
-        year = date[1] ; 
-        progressWhere = [
-            sequelize.where(Sequelize.fn('MONTH' , Sequelize.col('progress.progressDate')), {[Sequelize.Op.or] : month}),
-        ]; 
+        let Quarters = await common.allQuarters(date , req.userData.organizationID , limit);
+        progressWhere = {
+            [Sequelize.Op.or] : [
+                {[Sequelize.Op.and] : [
+                    sequelize.where(Sequelize.fn('MONTH' , Sequelize.col('progress.progressDate')),Quarters[0].month),
+                    sequelize.where(Sequelize.fn('YEAR' , Sequelize.col('progress.progressDate')) , Quarters[0].year)
+                ]},
+                {[Sequelize.Op.and] : [
+                    sequelize.where(Sequelize.fn('MONTH' , Sequelize.col('progress.progressDate')), Quarters[1].month),
+                    sequelize.where(Sequelize.fn('YEAR' , Sequelize.col('progress.progressDate')) , Quarters[1].year)
+                ]},
+                {[Sequelize.Op.and] : [
+                    sequelize.where(Sequelize.fn('MONTH' , Sequelize.col('progress.progressDate')), Quarters[2].month),
+                    sequelize.where(Sequelize.fn('YEAR' , Sequelize.col('progress.progressDate')) , Quarters[2].year)
+                ]},
+                {[Sequelize.Op.and] : [
+                    sequelize.where(Sequelize.fn('MONTH' , Sequelize.col('progress.progressDate')), Quarters[3].month),
+                    sequelize.where(Sequelize.fn('YEAR' , Sequelize.col('progress.progressDate')) , Quarters[3].year)
+                ]},
+            ]
+        }; 
+        console.log(progressWhere);
     }
     //list all the prespectives
     await prespectives.findOne(

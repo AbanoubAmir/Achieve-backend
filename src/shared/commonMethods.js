@@ -40,30 +40,52 @@ exports.getDate = async (month , type , orgID) => {
         }
         let chosenQuarter = month.split('-')[0];
         let year = month.split('-')[1]; 
-        console.log([quarters[chosenQuarter[1]-1] , year]);
         return [quarters[chosenQuarter[1]-1] , year];  
     }
 }
 
-exports.allQuarters = async (Quarter , orgID) => {
+exports.allQuarters = async (Quarter , orgID , limit) => {
     let quarters = [] ; 
     let months = [`Jan`, `Feb`, `Mar`, `Apr`, `May`, `Jun`, `Jul`,`Aug`, `Sep`, `Oct`, `Nov`, `Dec`];
+    let year = Quarter.split('-')[1] ; 
+    let Quarters = this.getHistoricalLabels(Quarter , 'Quarterly' , limit);
+    console.log(Quarters) ;
     await settings.findOne({
         where : {
             organizationID : orgID
         }
     }).then((result)=>{
-        quarters.push(result.dataValues.firstQuarterEnd);
-        quarters.push(result.dataValues.secondQuarterEnd);
-        quarters.push(result.dataValues.thirdQuarterEnd);
-        quarters.push(result.dataValues.forthQuarterEnd);
+        for(let i = 0 ;i<Quarters.length ; i++){
+            console.log(Quarters[i].split('-')[0]);
+            if(Quarters[i].split('-')[0] == 'Q1')
+            quarters.push({
+                month :result.dataValues.firstQuarterEnd.split('-')[0] ,
+                year : Quarters[i].split('-')[1]
+            });
+            if(Quarters[i].split('-')[0] == 'Q2')
+            quarters.push({
+                month :result.dataValues.secondQuarterEnd.split('-')[0] ,
+                year : Quarters[i].split('-')[1]
+            });
+            if(Quarters[i].split('-')[0] == 'Q3')
+            quarters.push({
+                month :result.dataValues.thirdQuarterEnd.split('-')[0] ,
+                year : Quarters[i].split('-')[1]
+            });
+            if(Quarters[i].split('-')[0] == 'Q4')
+            quarters.push({
+                month :result.dataValues.forthQuarterEnd.split('-')[0] ,
+                year : Quarters[i].split('-')[1]
+            });
+        }
     });
     for(let i = 0 ; i < quarters.length ;i++){
-        quarters[i] = months.indexOf(quarters[i].split('-')[0])+1;
+        quarters[i] = {
+            month : months.indexOf(quarters[i].month)+1 ,
+            year  : quarters[i].year
+        };
     }
-    let year = Quarter.split('-')[1] ; 
-    console.log([quarters , year]);
-    return [quarters , year];    
+    return quarters;    
 }
 
 exports.getLimit = async (orgID) => {

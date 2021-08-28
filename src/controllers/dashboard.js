@@ -15,8 +15,9 @@ const milestone_progress = require('../models/progress');
 exports.getDashboard = async (req , res , next) => {
     try{
         let fetchedRows = [] ; 
-        let dateType =  req.userData.selectedType ; 
-        let date =  req.userData.selectedDate ; 
+        console.log(req.headers);
+        let dateType =  req.headers.selectedtype ; 
+        let date =  req.headers.selecteddate ; 
         let month , year , limit = await common.getLimit(req.userData.organizationID);
         date = await common.getDate(date , dateType , req.userData.organizationID);
         month = date[0] ; 

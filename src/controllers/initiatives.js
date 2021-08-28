@@ -14,8 +14,8 @@ const sequelize = require('../config/database');
 exports.getInitiatives = async (req , res , next) =>{
   try{
     let fetchedRows = [] ;
-    let dateType =  req.userData.selectedType ; 
-    let date =  req.userData.selectedDate ; 
+    let dateType =  req.headers.selectedtype ; 
+    let date =  req.headers.selecteddate ; 
     let month , year , limit = await common.getLimit(req.userData.organizationID);
     date = await common.getDate(date , dateType , req.userData.organizationID);
     month = date[0] ; 
@@ -70,8 +70,8 @@ exports.getInitiatives = async (req , res , next) =>{
 exports.getInitiativeDetails = async (req , res , next) =>{
   try{
     let fetchedRow = {} ;
-    let dateType =  req.userData.selectedType ; 
-    let date =  req.userData.selectedDate ; 
+    let dateType =  req.headers.selectedtype ; 
+    let date =  req.headers.selecteddate ; 
     let month , year , limit = await common.getLimit(req.userData.organizationID);
     date = await common.getDate(date , dateType , req.userData.organizationID);
     month = date[0] ; 
