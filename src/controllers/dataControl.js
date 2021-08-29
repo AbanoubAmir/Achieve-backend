@@ -11,29 +11,29 @@ const initiatives = require('../models/initiatives');
 
 
 exports.DataIntegration= async (req , res , next) =>{
-    let workbook = new Excel.Workbook() ;
-    workbook.xlsx.readFile('C:/test.xlsx').then(()=>{
+  try {
+    let workbook = new Excel.Workbook() ;    
+    workbook.xlsx.readFile('D:/test.xlsx').then(()=>{
       workbook.eachSheet( async (worksheet , sheetId)=>{  
-          console.log(sheetId);
-        let dataArray = await changeRowsToDict(worksheet);  
-          if(sheetId === 28)
-            await organizations.bulkCreate(dataArray); 
-            if(sheetId === 2)
-            await prespectives.bulkCreate(dataArray); 
-          if(sheetId === 3)
-            await goals.bulkCreate(dataArray); 
-          if(sheetId === 4)
-            await objectives.bulkCreate(dataArray); 
-          if(sheetId === 5)
-            await initiatives.bulkCreate(dataArray);   
-          if(sheetId === 27)
-            await milestones.bulkCreate(dataArray);
-
+          console.log(worksheet.name);
+          const obj = require('../models/'+worksheet.name); 
+          let dataArray = await changeRowsToDict(worksheet);
+          let fieldsSet = new Set(dataArray.flatMap(x => Object.keys(x)));
+          fieldsSet.delete("ID");
+          let fieldsToUpdate = Array.from(fieldsSet);
+          obj.bulkCreate(dataArray,{ updateOnDuplicate: fieldsToUpdate });         
         });
-    });
-    res.status(200).json({
-      message: 'Uploaded Successfully' ,
-  }); 
+        res.status(200).json({
+          message: 'Uploaded Successfully' ,
+      });
+    }); 
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+        message : 'Something went wrong, plesae try again later'
+    }) ; 
+ }
+    
 }
 
 //parse excel row to json object
